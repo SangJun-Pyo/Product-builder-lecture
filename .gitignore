@@ -22,3 +22,4 @@ docx_extracted/
 # OS
 .DS_Store
 Thumbs.db
+firebase-debug.log

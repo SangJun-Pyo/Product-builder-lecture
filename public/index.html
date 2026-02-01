@@ -4,18 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-adsense-account" content="ca-pub-7297276836963940">
-  <title>Roblox Archetype - Playstyle Analysis</title>
+  <meta name="description" content="Discover your Roblox playstyle with our free archetype analysis tool. Find out if you're an Explorer, Grinder, Socializer, Competitor, Builder, Trader, Roleplayer, or Casual player.">
+  <meta name="keywords" content="Roblox, playstyle, archetype, analysis, MBTI, personality, gaming, player type">
+  <meta name="author" content="Roblox Archetype">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Roblox Archetype - Discover Your Playstyle">
+  <meta property="og:description" content="Free Roblox playstyle analysis tool. Discover your gaming personality type.">
+  <meta property="og:type" content="website">
+  <title>Roblox Archetype - Discover Your Playstyle | Free Analysis Tool</title>
   <link href='/style.css' rel='stylesheet'>
+  <link rel="canonical" href="https://roblox-archetype.pages.dev/">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7297276836963940" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="container">
-    <header>
-      <div class="logo">
-        <h1 data-i18n="title">Roblox Archetype</h1>
-        <span class="subtitle" data-i18n="subtitle">Discover Your Playstyle</span>
-      </div>
-      <div class="header-actions">
+    <!-- Navigation -->
+    <nav class="main-nav">
+      <a href="/" class="nav-logo">Roblox Archetype</a>
+      <ul class="nav-links">
+        <li><a href="#analyzer" data-i18n="nav_analyze">Analyze</a></li>
+        <li><a href="#about" data-i18n="nav_about">About</a></li>
+        <li><a href="#archetypes" data-i18n="nav_archetypes">Archetypes</a></li>
+        <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
+        <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
         <div class="lang-switcher">
           <button id="lang-en" class="lang-btn active">EN</button>
           <button id="lang-ko" class="lang-btn">KO</button>
@@ -25,11 +38,18 @@
           <span class="icon-moon">🌙</span>
         </button>
       </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+      <h1 data-i18n="hero_title">Discover Your Roblox Playstyle</h1>
+      <p class="hero-subtitle" data-i18n="hero_subtitle">Find out what type of Roblox player you are with our free analysis tool. Like MBTI for gamers!</p>
+      <a href="#analyzer" class="btn btn-primary btn-large" data-i18n="hero_cta">Start Free Analysis</a>
     </header>
 
     <main>
       <!-- Quick Analysis Section -->
-      <section id="quick-section" class="analysis-section">
+      <section id="analyzer" class="analysis-section">
         <div class="section-header">
           <h2 data-i18n="quick_title">Quick Analysis</h2>
           <span class="badge badge-lite" data-i18n="no_login">No Login Required</span>
@@ -45,6 +65,7 @@
               placeholder="Roblox Username"
               data-i18n-placeholder="username_placeholder"
               required
+              autocomplete="off"
             >
             <button type="submit" class="btn btn-primary" data-i18n="analyze">Analyze</button>
           </div>
@@ -102,6 +123,118 @@
         </div>
       </section>
 
+      <!-- About Section -->
+      <section id="about" class="content-section">
+        <h2 data-i18n="about_title">About Roblox Archetype</h2>
+        <div class="content-grid">
+          <div class="content-block">
+            <h3 data-i18n="about_what_title">What is Roblox Archetype?</h3>
+            <p data-i18n="about_what_desc">Roblox Archetype is a free tool that analyzes your Roblox gaming behavior and categorizes your playstyle into one of 8 distinct archetypes. Think of it as MBTI for Roblox players! Our algorithm examines your public profile data, badges, and group memberships to understand how you enjoy playing Roblox.</p>
+          </div>
+          <div class="content-block">
+            <h3 data-i18n="about_how_title">How Does It Work?</h3>
+            <p data-i18n="about_how_desc">Simply enter your Roblox username, and our system will analyze publicly available data from your profile. We look at patterns in your badges, the types of groups you've joined, and other public signals to determine your dominant playstyle. The analysis takes just a few seconds and requires no login.</p>
+          </div>
+          <div class="content-block">
+            <h3 data-i18n="about_privacy_title">Your Privacy Matters</h3>
+            <p data-i18n="about_privacy_desc">We only access publicly available information from Roblox. We never store your personal data, passwords, or any private information. Our analysis is based solely on public profile data that anyone can see on Roblox.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Archetypes Section -->
+      <section id="archetypes" class="content-section archetypes-section">
+        <h2 data-i18n="archetypes_title">The 8 Player Archetypes</h2>
+        <p class="section-intro" data-i18n="archetypes_intro">Every Roblox player has a unique way of enjoying the platform. Discover which archetype best describes your playstyle.</p>
+
+        <div class="archetypes-grid">
+          <article class="archetype-card">
+            <span class="archetype-emoji">🧭</span>
+            <h3 data-i18n="explorer">Explorer</h3>
+            <p data-i18n="explorer_full">Explorers love discovering new games and genres. They're always looking for the next adventure and enjoy variety in their gaming experience. If you find yourself constantly trying new games, you might be an Explorer!</p>
+          </article>
+
+          <article class="archetype-card">
+            <span class="archetype-emoji">⚔️</span>
+            <h3 data-i18n="grinder">Grinder</h3>
+            <p data-i18n="grinder_full">Grinders thrive on progression and achievement. They enjoy simulator games, tycoons, and any game where dedication leads to visible progress. Hours of gameplay? No problem for a Grinder!</p>
+          </article>
+
+          <article class="archetype-card">
+            <span class="archetype-emoji">💬</span>
+            <h3 data-i18n="socializer">Socializer</h3>
+            <p data-i18n="socializer_full">Socializers play Roblox primarily for the community. They love hangout games, making friends, and being part of groups. For them, the social experience is the main attraction.</p>
+          </article>
+
+          <article class="archetype-card">
+            <span class="archetype-emoji">🏆</span>
+            <h3 data-i18n="competitor">Competitor</h3>
+            <p data-i18n="competitor_full">Competitors live for the thrill of victory. PvP games, rankings, and skill-based challenges are their domain. They constantly strive to improve and prove themselves against others.</p>
+          </article>
+
+          <article class="archetype-card">
+            <span class="archetype-emoji">🔧</span>
+            <h3 data-i18n="builder">Builder</h3>
+            <p data-i18n="builder_full">Builders are the creative souls of Roblox. They enjoy construction games, customization, and expressing themselves through creation. Roblox Studio might be their favorite tool!</p>
+          </article>
+
+          <article class="archetype-card">
+            <span class="archetype-emoji">💰</span>
+            <h3 data-i18n="trader">Trader</h3>
+            <p data-i18n="trader_full">Traders have a keen eye for value. They enjoy the economic aspects of Roblox, from limited items to in-game trading. Making smart deals is their specialty.</p>
+          </article>
+
+          <article class="archetype-card">
+            <span class="archetype-emoji">🎭</span>
+            <h3 data-i18n="roleplayer">Roleplayer</h3>
+            <p data-i18n="roleplayer_full">Roleplayers immerse themselves in stories and characters. They love roleplay games, creating narratives, and living out virtual lives. Imagination is their greatest asset.</p>
+          </article>
+
+          <article class="archetype-card">
+            <span class="archetype-emoji">🎮</span>
+            <h3 data-i18n="casual">Casual</h3>
+            <p data-i18n="casual_full">Casuals enjoy Roblox without pressure. They play for fun, relaxation, and don't worry about rankings or achievements. Quick sessions and simple enjoyment define their style.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section id="faq" class="content-section faq-section">
+        <h2 data-i18n="faq_title">Frequently Asked Questions</h2>
+
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary data-i18n="faq_q1">Is this service free?</summary>
+            <p data-i18n="faq_a1">Yes! Roblox Archetype is completely free to use. Simply enter your username and get your results instantly.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faq_q2">Is my account safe?</summary>
+            <p data-i18n="faq_a2">Absolutely. We only read publicly available information from your Roblox profile. We never ask for or store passwords, and we cannot access any private data.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faq_q3">How accurate is the analysis?</summary>
+            <p data-i18n="faq_a3">Our quick analysis provides an estimate based on public data. For more accurate results, we recommend the full analysis which includes a personality survey. The quick analysis typically has 25-60% confidence.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faq_q4">Can I have multiple archetypes?</summary>
+            <p data-i18n="faq_a4">Yes! Most players have traits from multiple archetypes. We show your primary archetype along with scores for all 8 types, so you can see your complete gaming personality profile.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faq_q5">Why can't you find my account?</summary>
+            <p data-i18n="faq_a5">Make sure you're entering your exact Roblox username (not display name). If your profile is set to private, some features may be limited.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faq_q6">Is this affiliated with Roblox?</summary>
+            <p data-i18n="faq_a6">No, Roblox Archetype is an independent fan project and is not affiliated with, endorsed by, or sponsored by Roblox Corporation.</p>
+          </details>
+        </div>
+      </section>
+
       <!-- Full Analysis CTA -->
       <section class="full-cta-section">
         <div class="cta-card">
@@ -117,9 +250,10 @@
         </div>
       </section>
 
-      <!-- Partnership Form -->
-      <section class="contact-section">
-        <h2 data-i18n="partnership">Partnership Inquiry</h2>
+      <!-- Contact / Partnership Form -->
+      <section id="contact" class="contact-section">
+        <h2 data-i18n="partnership">Contact & Partnership</h2>
+        <p class="section-desc" data-i18n="contact_desc">Have questions, feedback, or partnership inquiries? We'd love to hear from you!</p>
         <form action="https://formspree.io/f/mdadornl" method="POST" class="contact-form">
           <div class="form-group">
             <label for="name" data-i18n="form_name">Name / Company</label>
@@ -130,16 +264,50 @@
             <input type="email" id="email" name="email" required placeholder="example@email.com">
           </div>
           <div class="form-group">
+            <label for="subject" data-i18n="form_subject">Subject</label>
+            <select id="subject" name="subject" required>
+              <option value="general" data-i18n="subject_general">General Inquiry</option>
+              <option value="feedback" data-i18n="subject_feedback">Feedback</option>
+              <option value="bug" data-i18n="subject_bug">Bug Report</option>
+              <option value="partnership" data-i18n="subject_partnership">Partnership</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="message" data-i18n="form_message">Message</label>
             <textarea id="message" name="message" rows="4" required data-i18n-placeholder="form_message_placeholder"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" data-i18n="form_submit">Submit</button>
+          <button type="submit" class="btn btn-primary" data-i18n="form_submit">Send Message</button>
         </form>
       </section>
     </main>
 
-    <footer>
-      <p>&copy; 2025 Roblox Archetype. <span data-i18n="footer_note">This is a fan project, not affiliated with Roblox Corporation.</span></p>
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Roblox Archetype</h4>
+          <p data-i18n="footer_desc">Free playstyle analysis tool for Roblox players. Discover your gaming personality today!</p>
+        </div>
+        <div class="footer-section">
+          <h4 data-i18n="footer_links">Quick Links</h4>
+          <ul>
+            <li><a href="#analyzer" data-i18n="nav_analyze">Analyze</a></li>
+            <li><a href="#about" data-i18n="nav_about">About</a></li>
+            <li><a href="#archetypes" data-i18n="nav_archetypes">Archetypes</a></li>
+            <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4 data-i18n="footer_legal">Legal</h4>
+          <ul>
+            <li><a href="/privacy.html" data-i18n="privacy_policy">Privacy Policy</a></li>
+            <li><a href="/terms.html" data-i18n="terms_of_service">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Roblox Archetype. <span data-i18n="footer_note">This is a fan project, not affiliated with Roblox Corporation.</span></p>
+      </div>
     </footer>
   </div>
 
