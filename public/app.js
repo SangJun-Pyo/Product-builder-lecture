@@ -12,8 +12,8 @@ const ARCHETYPES = {
   casual: { icon: '🎮', color: '#607D8B' }
 };
 
-// CORS Proxy configuration
-const CORS_PROXY = 'https://corsproxy.io/?';
+// API Base URL (same origin - backend handles Roblox API calls)
+const API_BASE = '/api';
 
 // Theme Toggle
 function initTheme() {
@@ -43,24 +43,15 @@ function initTheme() {
   document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
 }
 
-// Roblox API with CORS Proxy
+// Roblox API (via backend - no CORS issues)
 const RobloxAPI = {
-  // Helper to fetch with CORS proxy
-  async fetchWithProxy(url, options = {}) {
-    const proxyUrl = CORS_PROXY + encodeURIComponent(url);
-    const response = await fetch(proxyUrl, options);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    return response.json();
-  },
-
   // Search users by keyword (for autocomplete)
   async searchUsers(keyword) {
     if (!keyword || keyword.length < 2) return [];
     try {
-      const url = `https://users.roblox.com/v1/users/search?keyword=${encodeURIComponent(keyword)}&limit=5`;
-      const data = await this.fetchWithProxy(url);
+      const response = await fetch(`${API_BASE}/users/search?keyword=${encodeURIComponent(keyword)}`);
+      if (!response.ok) return [];
+      const data = await response.json();
       return data.data || [];
     } catch (err) {
       console.error('Search error:', err);
@@ -70,66 +61,29 @@ const RobloxAPI = {
 
   // Resolve username to user ID
   async getUserByUsername(username) {
-    const url = 'https://users.roblox.com/v1/usernames/users';
-    const proxyUrl = CORS_PROXY + encodeURIComponent(url);
-
-    const response = await fetch(proxyUrl, {
+    const response = await fetch(`${API_BASE}/users/resolve`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usernames: [username], excludeBannedUsers: true })
+      body: JSON.stringify({ username })
     });
 
     if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('User not found');
+      }
       throw new Error('API request failed');
     }
 
-    const data = await response.json();
-    if (data.data && data.data.length > 0) {
-      return data.data[0];
-    }
-    throw new Error('User not found');
+    return response.json();
   },
 
-  // Get user profile
-  async getUserProfile(userId) {
-    const url = `https://users.roblox.com/v1/users/${userId}`;
-    return this.fetchWithProxy(url);
-  },
-
-  // Get user avatar thumbnail
-  async getAvatarUrl(userId) {
-    try {
-      const url = `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png`;
-      const data = await this.fetchWithProxy(url);
-      if (data.data && data.data.length > 0) {
-        return data.data[0].imageUrl;
-      }
-    } catch {
-      // Fallback to default avatar
+  // Get full analysis data (profile, avatar, badges, groups)
+  async getAnalysisData(userId) {
+    const response = await fetch(`${API_BASE}/analyze/${userId}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch analysis data');
     }
-    return null;
-  },
-
-  // Get user badges (public)
-  async getUserBadges(userId) {
-    try {
-      const url = `https://badges.roblox.com/v1/users/${userId}/badges?limit=100&sortOrder=Desc`;
-      const data = await this.fetchWithProxy(url);
-      return data.data || [];
-    } catch {
-      return [];
-    }
-  },
-
-  // Get user groups (public)
-  async getUserGroups(userId) {
-    try {
-      const url = `https://groups.roblox.com/v1/users/${userId}/groups/roles`;
-      const data = await this.fetchWithProxy(url);
-      return data.data || [];
-    } catch {
-      return [];
-    }
+    return response.json();
   }
 };
 
@@ -455,19 +409,18 @@ const UI = {
       // Step 1: Resolve username
       const user = await RobloxAPI.getUserByUsername(username);
 
-      // Step 2: Fetch data in parallel
-      const [profile, avatarUrl, badges, groups] = await Promise.all([
-        RobloxAPI.getUserProfile(user.id),
-        RobloxAPI.getAvatarUrl(user.id),
-        RobloxAPI.getUserBadges(user.id),
-        RobloxAPI.getUserGroups(user.id)
-      ]);
+      // Step 2: Get all analysis data from backend
+      const data = await RobloxAPI.getAnalysisData(user.id);
 
       // Step 3: Analyze
-      const result = AnalysisEngine.computeResult(badges, groups);
+      const result = AnalysisEngine.computeResult(data.badges, data.groups);
 
       // Step 4: Show result
-      this.showResult({ ...user, ...profile }, avatarUrl, result);
+      this.showResult(
+        { ...user, ...data.profile },
+        data.avatarUrl,
+        result
+      );
 
     } catch (err) {
       console.error('Analysis error:', err);
