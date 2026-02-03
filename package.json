@@ -1,5 +1,5 @@
 {
-  "name": "roblox-archetype",
+  "name": "robprofile",
   "version": "1.0.0",
   "description": "Roblox Playstyle Analysis Service",
   "main": "server.js",
