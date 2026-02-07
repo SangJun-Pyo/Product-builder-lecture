@@ -378,11 +378,27 @@ const i18n = {
     }
   },
 
-  init() {
+  async init() {
     const saved = localStorage.getItem('locale');
+
     if (saved && this.messages[saved]) {
+      // User has a saved preference - use it
       this.currentLocale = saved;
+    } else {
+      // No saved preference - detect from IP
+      try {
+        const response = await fetch('/api/geo');
+        if (response.ok) {
+          const { country } = await response.json();
+          // Korean IP → Korean, otherwise English
+          this.currentLocale = (country === 'KR') ? 'ko' : 'en';
+        }
+      } catch (e) {
+        // Fallback to English on error
+        this.currentLocale = 'en';
+      }
     }
+
     this.updateUI();
     this.setupListeners();
   },
