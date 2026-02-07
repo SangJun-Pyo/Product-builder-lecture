@@ -462,16 +462,6 @@ async function init() {
   initTheme();
   UI.init();
 
-  // Setup OAuth login buttons
-  document.getElementById('login-cta')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    startOAuthLogin();
-  });
-  document.getElementById('full-login-btn')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    startOAuthLogin();
-  });
-
   // Check for OAuth callback result in URL
   const urlParams = new URLSearchParams(window.location.search);
   const oauthResult = urlParams.get('oauth');
