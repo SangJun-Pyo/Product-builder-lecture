@@ -1,5 +1,6 @@
 // GET /api/admin/refresh-games?key=...
 // Fetches popular games from Roblox and stores in KV
+// v1.1 - KV binding support
 
 import { generateTags } from '../../lib/tags-config.js';
 
