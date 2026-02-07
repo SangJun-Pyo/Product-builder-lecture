@@ -1,13 +1,8 @@
 // GET /api/detail/[userId]
-// Detailed analysis with Discover-based personalized game recommendations
+// Detailed user analysis - archetype scores and profile data
+// Recommendations are now served by /api/recommend
 
-import {
-  ARCHETYPE_TO_TAGS,
-  generateGameTags,
-  calculateRecommendationScore,
-  getRecommendationReason,
-  getPersonalizedRecommendations
-} from '../../lib/recommendation.js';
+import { ARCHETYPE_TO_TAGS } from '../../lib/recommendation.js';
 
 export async function onRequestGet(context) {
   const { params } = context;
@@ -67,10 +62,7 @@ export async function onRequestGet(context) {
     // Step 5: Calculate archetype scores
     const archetypeScores = calculateDetailedArchetypeScores(allBadges, groups, profile);
 
-    // Step 6: Get personalized recommendations from Discover/Charts
-    const recommendations = await getPersonalizedRecommendations(archetypeScores.scores, 25);
-
-    // Step 7: Build response
+    // Step 6: Build response (recommendations served separately by /api/recommend)
     const response = {
       profile: {
         id: profile.id,
@@ -88,7 +80,6 @@ export async function onRequestGet(context) {
         accountAgeDays: Math.floor((Date.now() - new Date(profile.created).getTime()) / (1000 * 60 * 60 * 24))
       },
       archetypeScores,
-      recommendations,
       groups: groups.slice(0, 20)
     };
 

@@ -1,4 +1,4 @@
-// Detail Analysis Page - Discover-based Recommendations
+// Detail Analysis Page - KV Pool-based Recommendations
 
 const ARCHETYPES = {
   explorer: { icon: '🧭', color: '#4CAF50' },
@@ -58,8 +58,17 @@ async function fetchDetailAnalysis(userId) {
   return response.json();
 }
 
-function renderDetail(data) {
-  const { profile, avatarUrl, stats, recommendations, archetypeScores } = data;
+async function fetchRecommendations(userId) {
+  const response = await fetch(`/api/recommend?userId=${userId}`);
+  if (!response.ok) {
+    console.error('Recommendations fetch failed');
+    return null;
+  }
+  return response.json();
+}
+
+function renderDetail(data, recommendations) {
+  const { profile, avatarUrl, stats, archetypeScores } = data;
 
   // User header
   document.getElementById('detail-avatar').src = avatarUrl ||
@@ -120,69 +129,92 @@ function renderDetail(data) {
   document.getElementById('recommendation-text').textContent =
     i18n.t(`insight_${primary}`) || PERSONALIZED_INSIGHTS[primary];
 
-  // Recommended games
+  // Recommended games (from /api/recommend)
+  renderRecommendations(recommendations, primary);
+
+  // Show result
+  document.getElementById('detail-loading').classList.add('hidden');
+  document.getElementById('detail-result').classList.remove('hidden');
+}
+
+function renderRecommendations(recData, primaryArchetype) {
   const gamesList = document.getElementById('games-list');
-  if (!recommendations || recommendations.length === 0) {
+  const poolInfo = document.getElementById('pool-info');
+
+  // Show pool update time if available
+  if (recData && recData.updatedAt && poolInfo) {
+    const updateTime = new Date(recData.updatedAt).toLocaleString();
+    poolInfo.textContent = `${i18n.t('pool_updated') || 'Pool updated'}: ${updateTime}`;
+    poolInfo.classList.remove('hidden');
+  }
+
+  const recommendations = recData?.recommendations || [];
+
+  if (recommendations.length === 0) {
     gamesList.innerHTML = `
       <div class="empty-state">
         <p>${i18n.t('no_recommendations') || 'Unable to load recommendations. Please try again later.'}</p>
       </div>
     `;
-  } else {
-    gamesList.innerHTML = recommendations.map((game) => {
-      const matchLevel = game.recommendationScore >= 70 ? 'high'
-        : game.recommendationScore >= 40 ? 'medium' : 'low';
-      const matchLabel = game.recommendationScore >= 70
-        ? (i18n.t('great_match') || 'Great Match')
-        : game.recommendationScore >= 40
-          ? (i18n.t('good_match') || 'Good Match')
-          : (i18n.t('suggested') || 'Suggested');
-
-      // Render tags (max 4)
-      const tagsHtml = (game.tags || []).slice(0, 4).map(tag =>
-        `<span class="game-tag">${tag}</span>`
-      ).join('');
-
-      return `
-        <a href="${game.gameUrl}" target="_blank" rel="noopener" class="game-link">
-          <div class="game-item">
-            <img
-              src="https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.universeId}&size=150x150&format=Png"
-              alt="${escapeHtml(game.name)}"
-              class="game-icon"
-              onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-placeholder/150/150/AvatarHeadshot/Png/noFilter'"
-            >
-            <div class="game-info">
-              <div class="game-name">${escapeHtml(game.name)}</div>
-              <div class="game-meta">
-                ${game.genre ? `<span>${game.genre}</span>` : ''}
-                <span class="playing-badge">
-                  <span class="playing-dot"></span>
-                  ${formatNumber(game.playing)} ${i18n.t('playing') || 'playing'}
-                </span>
-                <span>${formatNumber(game.visits)} ${i18n.t('visits') || 'visits'}</span>
-              </div>
-              <div class="game-tags">${tagsHtml}</div>
-            </div>
-            <div class="game-recommendation">
-              <div class="recommendation-score">
-                <div class="score-bar">
-                  <div class="score-fill" style="width: ${game.recommendationScore}%"></div>
-                </div>
-                <span class="score-value">${game.recommendationScore}%</span>
-              </div>
-              <span class="match-badge ${matchLevel}">${matchLabel}</span>
-              <div class="recommendation-reason">${i18n.t('recommended_for_' + primary) || game.recommendationReason || `Recommended for your ${i18n.t(primary)} playstyle`}</div>
-            </div>
-          </div>
-        </a>
-      `;
-    }).join('');
+    return;
   }
 
-  // Show result
-  document.getElementById('detail-loading').classList.add('hidden');
-  document.getElementById('detail-result').classList.remove('hidden');
+  gamesList.innerHTML = recommendations.map((game) => {
+    const score = game.recommendScore || game.recommendationScore || 0;
+    const matchLevel = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
+    const matchLabel = score >= 70
+      ? (i18n.t('great_match') || 'Great Match')
+      : score >= 40
+        ? (i18n.t('good_match') || 'Good Match')
+        : (i18n.t('suggested') || 'Suggested');
+
+    // Render why tags (matched archetypes)
+    const whyTags = (game.why || []).slice(0, 3).map(tag =>
+      `<span class="why-tag">${ARCHETYPES[tag]?.icon || ''} ${i18n.t(tag) || tag}</span>`
+    ).join('');
+
+    // Render game tags
+    const tagsHtml = (game.tags || []).slice(0, 4).map(tag =>
+      `<span class="game-tag">${tag}</span>`
+    ).join('');
+
+    return `
+      <a href="${game.gameUrl}" target="_blank" rel="noopener" class="game-link">
+        <div class="game-item">
+          <img
+            src="${game.iconUrl || `https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.universeId}&size=150x150&format=Png`}"
+            alt="${escapeHtml(game.name)}"
+            class="game-icon"
+            onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-placeholder/150/150/AvatarHeadshot/Png/noFilter'"
+          >
+          <div class="game-info">
+            <div class="game-name">${escapeHtml(game.name)}</div>
+            <div class="game-meta">
+              ${game.genre ? `<span>${game.genre}</span>` : ''}
+              <span class="playing-badge">
+                <span class="playing-dot"></span>
+                ${formatNumber(game.playing)} ${i18n.t('playing') || 'playing'}
+              </span>
+              <span>${formatNumber(game.visits)} ${i18n.t('visits') || 'visits'}</span>
+            </div>
+            <div class="game-tags">${tagsHtml}</div>
+          </div>
+          <div class="game-recommendation">
+            <div class="recommendation-score">
+              <div class="score-bar">
+                <div class="score-fill" style="width: ${score}%"></div>
+              </div>
+              <span class="score-value">${score}%</span>
+            </div>
+            <span class="match-badge ${matchLevel}">${matchLabel}</span>
+            <div class="recommendation-reason">
+              ${whyTags || i18n.t('recommended_for_' + primaryArchetype) || `Recommended for your ${i18n.t(primaryArchetype)} playstyle`}
+            </div>
+          </div>
+        </div>
+      </a>
+    `;
+  }).join('');
 }
 
 function showError(message) {
@@ -217,8 +249,13 @@ async function init() {
   }
 
   try {
-    const data = await fetchDetailAnalysis(userId);
-    renderDetail(data);
+    // Fetch both detail and recommendations in parallel
+    const [detailData, recData] = await Promise.all([
+      fetchDetailAnalysis(userId),
+      fetchRecommendations(userId)
+    ]);
+
+    renderDetail(detailData, recData);
   } catch (err) {
     console.error('Detail analysis error:', err);
     showError(err.message || i18n.t('error_api') || 'Failed to load analysis. Please try again.');

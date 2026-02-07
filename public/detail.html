@@ -145,6 +145,25 @@
       color: var(--text-muted);
     }
 
+    .why-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.4rem;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 4px;
+      margin-right: 0.25rem;
+      font-style: normal;
+    }
+
+    .pool-info {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
     .game-recommendation {
       text-align: right;
       min-width: 110px;
@@ -440,6 +459,7 @@
             <span class="section-subtitle" data-i18n="live_games_note">(Live games with 500+ players)</span>
           </h2>
           <p class="section-desc" data-i18n="recommendations_desc">Games from Roblox Discover, ranked by how well they match your playstyle.</p>
+          <p id="pool-info" class="pool-info hidden"></p>
 
           <div id="games-list" class="games-list"></div>
 
